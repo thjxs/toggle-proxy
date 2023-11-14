@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+<schema id="org.gnome.shell.extensions.toggleproxy" path="/org/gnome/shell/extensions/toggleproxy/">
+<key name="username" type="s">
+<default>""</default>
+</key>
+<key name="password" type="s">
+<default>""</default>
+</key>
+</schema>
+</schemalist>

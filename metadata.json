@@ -1,0 +1,9 @@
+{
+  "name": "Toggle Proxy",
+  "description": "Toggle v2ray proxy",
+  "uuid": "toggle-proxy@wuma",
+  "shell-version": [
+    "45"
+  ],
+  "settings-schema": "org.gnome.shell.extensions.toggleproxy"
+}
