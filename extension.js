@@ -53,7 +53,7 @@ let state = {
 
 };
 
-const httpSession = new Soup.Session();
+let httpSession
 
 const getResult = (bytes) =>
   JSON.parse(new TextDecoder().decode(bytes.get_data()));
@@ -74,7 +74,7 @@ async function login() {
   };
   const message = Soup.Message.new_from_encoded_form(
     "POST",
-    "http://localhost:2017/api/login",
+    "http://127.0.0.1:2017/api/login",
     JSON.stringify(form)
   );
   try {
@@ -98,7 +98,7 @@ async function login() {
 
 async function touch() {
   try {
-    const message = Soup.Message.new("GET", "http://localhost:2017/api/touch");
+    const message = Soup.Message.new("GET", "http://127.0.0.1:2017/api/touch");
     const headers = message.get_request_headers();
     headers.append("Authorization", state.token);
     const bytes = await httpSession.send_and_read_async(
@@ -120,7 +120,7 @@ async function touch() {
 async function toggle() {
   try {
     let method = state.running ? "DELETE" : "POST";
-    const message = Soup.Message.new(method, "http://localhost:2017/api/v2ray");
+    const message = Soup.Message.new(method, "http://127.0.0.1:2017/api/v2ray");
     const headers = message.get_request_headers();
     headers.append("Authorization", state.token);
     const bytes = await httpSession.send_and_read_async(
@@ -188,6 +188,7 @@ const Indicator = GObject.registerClass(
 
 export default class ToggleProxyExtension extends Extension {
   enable() {
+    httpSession = new Soup.Session();
     this._settings = this.getSettings('org.gnome.shell.extensions.toggleproxy');
     state.user.username = this._settings.get_string('username')
     state.user.password = this._settings.get_string('password')
@@ -208,5 +209,7 @@ export default class ToggleProxyExtension extends Extension {
   disable() {
     this._indicator.destroy();
     this._indicator = null;
+    this._settings = null;
+    httpSession = null;
   }
 }
